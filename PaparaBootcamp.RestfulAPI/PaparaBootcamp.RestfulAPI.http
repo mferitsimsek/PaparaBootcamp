@@ -1,0 +1,6 @@
+@PaparaBootcamp.RestfulAPI_HostAddress = http://localhost:5241
+
+GET {{PaparaBootcamp.RestfulAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
