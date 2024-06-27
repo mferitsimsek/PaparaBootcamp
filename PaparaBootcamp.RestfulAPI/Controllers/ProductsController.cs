@@ -122,7 +122,7 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
                 return NotFound(new { Message = "Ürün bulunamadı." });
             }
 
-            patchDoc.ApplyTo(product, (Microsoft.AspNetCore.JsonPatch.Adapters.IObjectAdapter)ModelState);
+            patchDoc.ApplyTo(product,ModelState);
 
             if (!ModelState.IsValid)
             {

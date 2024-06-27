@@ -1,14 +1,18 @@
 using PaparaBootcamp.RestfulAPI.Context;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
+using PaparaBootcamp.RestfulAPI.Validations;
+using FluentValidation;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseInMemoryDatabase("MyDatabase"));
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddValidatorsFromAssemblyContaining<ProductValidator>();
+builder.Services.AddFluentValidationAutoValidation();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
