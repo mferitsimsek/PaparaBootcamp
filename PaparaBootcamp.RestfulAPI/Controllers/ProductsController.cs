@@ -62,7 +62,7 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
             return Ok(new { items, paginationMetadata });
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<ActionResult<Product>> GetProduct([FromQuery]int id)
         {
             var product = await _context.Products.FindAsync(id);
