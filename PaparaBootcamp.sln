@@ -9,11 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9AD1E426-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{F7ED7EF7-849B-4C69-93A2-133C893AD133}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaparaBootcamp.Application", "PaparaBootcamp.Application\PaparaBootcamp.Application.csproj", "{16137AE5-C264-435A-B976-70FE2D8DADC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaparaBootcamp.Application", "PaparaBootcamp.Application\PaparaBootcamp.Application.csproj", "{16137AE5-C264-435A-B976-70FE2D8DADC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaparaBootcamp.Domain", "PaparaBootcamp.Domain\PaparaBootcamp.Domain.csproj", "{BE95AE65-5C18-4B0B-A26A-027ADA86301D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaparaBootcamp.Domain", "PaparaBootcamp.Domain\PaparaBootcamp.Domain.csproj", "{BE95AE65-5C18-4B0B-A26A-027ADA86301D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaparaBootcamp.Persistence", "PaparaBootcamp.Persistence\PaparaBootcamp.Persistence.csproj", "{24223FD7-61CA-46A4-919F-5AB684DCEB5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaparaBootcamp.Persistence", "PaparaBootcamp.Persistence\PaparaBootcamp.Persistence.csproj", "{24223FD7-61CA-46A4-919F-5AB684DCEB5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{B64003C5-8CFD-419A-9E10-97130C16DBBE}"
 EndProject

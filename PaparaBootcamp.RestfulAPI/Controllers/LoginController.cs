@@ -33,8 +33,11 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
             var user = _loginService.Login(request.Email, request.Password);
             if (user)
             {
-                string authHeaderValue = $"{request.Email}:{request.Password}";
-                HttpContext.Response.Headers.Add("Authorization", authHeaderValue);
+                //string authHeaderValue = $"{request.Email}:{request.Password}";
+                //HttpContext.Response.Headers.Add("Authorization", authHeaderValue);
+                HttpContext.Response.Cookies.Append("LoggedInUser",request.Email);
+
+
                 return Ok(new { Message = "Giriş Başarılı" });
 
 
