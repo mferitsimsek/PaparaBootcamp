@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PaparaBootcamp.RestfulAPI.Entities;
-using System.Collections.Generic;
-using System.Reflection.Emit;
+using PaparaBootcamp.Domain.Entities;
 
-namespace PaparaBootcamp.RestfulAPI.Context
+
+namespace PaparaBootcamp.Persistence.Context
 {
     public class MyDbContext : DbContext
     {
@@ -17,7 +16,6 @@ namespace PaparaBootcamp.RestfulAPI.Context
             modelBuilder.Entity<Product>().HasKey(p => p.Id);
             modelBuilder.Entity<Product>().Property(p => p.Name).IsRequired();
             modelBuilder.Entity<Product>().Property(p => p.Description).IsRequired();
-            modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18,2)");
         }
     }
 }

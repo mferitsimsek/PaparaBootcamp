@@ -17,4 +17,16 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\DTOs\DTOs.csproj" />
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+    <ProjectReference Include="..\PaparaBootcamp.Application\PaparaBootcamp.Application.csproj" />
+    <ProjectReference Include="..\PaparaBootcamp.Core\Entities.csproj" />
+    <ProjectReference Include="..\PaparaBootcamp.Domain\PaparaBootcamp.Domain.csproj" />
+    <ProjectReference Include="..\PaparaBootcamp.Persistence\PaparaBootcamp.Persistence.csproj" />
+    <ProjectReference Include="..\Repositories\Repositories.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+
 </Project>

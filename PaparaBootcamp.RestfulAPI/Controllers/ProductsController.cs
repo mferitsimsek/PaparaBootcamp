@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PaparaBootcamp.RestfulAPI.Context;
-using PaparaBootcamp.RestfulAPI.Entities;
+using PaparaBootcamp.Application.Attributes;
+using PaparaBootcamp.Application.Services;
+using PaparaBootcamp.Domain.DTOs;
+using PaparaBootcamp.Domain.Entities;
+using PaparaBootcamp.Persistence.Context;
+using System.Runtime.InteropServices;
 
 namespace PaparaBootcamp.RestfulAPI.Controllers
 {
@@ -12,44 +16,27 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly MyDbContext _context;
+        private readonly ProductService _productService;
+        private readonly IMapper _mapper;
 
-        public ProductsController(MyDbContext context)
+        public ProductsController(MyDbContext context, ProductService productService, IMapper mapper)
         {
             _context = context;
+            _productService = productService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(string? name, string? sortBy)
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(string? name, string? sortBy)
         {
-            var query = _context.Products.AsQueryable();
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                query = query.Where(p => p.Name.Contains(name));
-            }
-
-            if (!string.IsNullOrEmpty(sortBy))
-            {
-                query = sortBy.ToLower() switch
-                {
-                    "name" => query.OrderBy(p => p.Name),
-                    "price" => query.OrderBy(p => p.Price),
-                    _ => query
-                };
-            }
-
-            return Ok(await query.ToListAsync());
+            var products = await _productService.GetProductsAsync(name, sortBy);
+            return Ok(products);
         }
-        [HttpGet]
+
+        [HttpGet("items")]
         public async Task<ActionResult> GetItems(int pageIndex = 0, int pageSize = 10)
         {
-            var items = _context.Products
-               .Skip(pageIndex * pageSize)
-               .Take(pageSize)
-               .ToList();
-
-            var totalCount =  _context.Products.Count();
-
+            var (items, totalCount) = await _productService.GetItemsAsync(pageIndex, pageSize);
             var paginationMetadata = new
             {
                 totalCount,
@@ -62,10 +49,10 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
             return Ok(new { items, paginationMetadata });
         }
 
-        [HttpGet]
-        public async Task<ActionResult<Product>> GetProduct([FromQuery]int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productService.GetProductAsync(id);
 
             if (product == null)
             {
@@ -76,35 +63,34 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct([FromBody] Product product)
+        [Auth]
+        public async Task<ActionResult<Product>> PostProduct([FromBody] ProductDTO productDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            var product = _mapper.Map<Product>(productDTO);
 
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
+            await _productService.AddProductAsync(product);
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Product>> PutProduct([FromQuery]int id, [FromBody] Product product)
+        [Auth]
+        public async Task<ActionResult<Product>> PutProduct(int id, [FromBody] ProductDTO productDTO)
         {
-            if (id != product.Id)
+            if (id != productDTO.Id)
             {
-                return BadRequest(new { Message = "Güncellemek istediğiniz ürün id leri eşleşmedi." });
+                return BadRequest(new { Message = "Güncellemek istediğiniz ürün id'leri eşleşmedi." });
             }
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _context.Entry(product).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
+            var product= _mapper.Map<Product>(productDTO);  
+            await _productService.UpdateProductAsync(product);
             return Ok(product);
         }
 
@@ -116,37 +102,35 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
                 return BadRequest(new { Message = "Geçersiz yama dokümanı." });
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productService.GetProductAsync(id);
             if (product == null)
             {
                 return NotFound(new { Message = "Ürün bulunamadı." });
             }
 
-            patchDoc.ApplyTo(product,ModelState);
+            patchDoc.ApplyTo(product, ModelState);
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await _context.SaveChangesAsync();
-
+            await _productService.UpdateProductAsync(product);
             return Ok(product);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productService.GetProductAsync(id);
             if (product == null)
             {
-                return NotFound(new {Message="Ürün bulunamadı."});
+                return NotFound(new { Message = "Ürün bulunamadı." });
             }
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
+            await _productService.DeleteProductAsync(id);
             return NoContent();
         }
+
     }
 }

@@ -1,22 +1,13 @@
-using PaparaBootcamp.RestfulAPI.Context;
-using Microsoft.EntityFrameworkCore;
-using FluentValidation.AspNetCore;
-using PaparaBootcamp.RestfulAPI.Validations;
-using FluentValidation;
+using PaparaBootcamp.RestfulAPI.Extensions;
+using PaparaBootcamp.RestfulAPI.Extensions.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddDbContext<MyDbContext>(options =>
-    options.UseInMemoryDatabase("MyDatabase"));
-
-builder.Services.AddControllers().AddNewtonsoftJson();
-builder.Services.AddValidatorsFromAssemblyContaining<ProductValidator>();
-builder.Services.AddFluentValidationAutoValidation();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -27,7 +18,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 app.UseAuthorization();
+
+//app.UseAuthentication();
 
 app.MapControllers();
 

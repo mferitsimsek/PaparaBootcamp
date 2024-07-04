@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using PaparaBootcamp.RestfulAPI.Entities;
+using PaparaBootcamp.Domain.Entities;
 
-namespace PaparaBootcamp.RestfulAPI.Validations
+namespace PaparaBootcamp.Application.Validators
 {
     public class ProductValidator : AbstractValidator<Product>
     {

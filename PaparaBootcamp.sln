@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaparaBootcamp.RestfulAPI", "PaparaBootcamp.RestfulAPI\PaparaBootcamp.RestfulAPI.csproj", "{6FAFE3FC-6347-4859-A25E-900B88AA8231}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaparaBootcamp.RestfulAPI", "PaparaBootcamp.RestfulAPI\PaparaBootcamp.RestfulAPI.csproj", "{6FAFE3FC-6347-4859-A25E-900B88AA8231}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9AD1E426-A5C0-4109-9E56-83C6145DFFD3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{F7ED7EF7-849B-4C69-93A2-133C893AD133}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaparaBootcamp.Application", "PaparaBootcamp.Application\PaparaBootcamp.Application.csproj", "{16137AE5-C264-435A-B976-70FE2D8DADC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaparaBootcamp.Domain", "PaparaBootcamp.Domain\PaparaBootcamp.Domain.csproj", "{BE95AE65-5C18-4B0B-A26A-027ADA86301D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaparaBootcamp.Persistence", "PaparaBootcamp.Persistence\PaparaBootcamp.Persistence.csproj", "{24223FD7-61CA-46A4-919F-5AB684DCEB5F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{B64003C5-8CFD-419A-9E10-97130C16DBBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +27,27 @@ Global
 		{6FAFE3FC-6347-4859-A25E-900B88AA8231}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FAFE3FC-6347-4859-A25E-900B88AA8231}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FAFE3FC-6347-4859-A25E-900B88AA8231}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16137AE5-C264-435A-B976-70FE2D8DADC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16137AE5-C264-435A-B976-70FE2D8DADC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16137AE5-C264-435A-B976-70FE2D8DADC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16137AE5-C264-435A-B976-70FE2D8DADC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE95AE65-5C18-4B0B-A26A-027ADA86301D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE95AE65-5C18-4B0B-A26A-027ADA86301D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE95AE65-5C18-4B0B-A26A-027ADA86301D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE95AE65-5C18-4B0B-A26A-027ADA86301D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24223FD7-61CA-46A4-919F-5AB684DCEB5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24223FD7-61CA-46A4-919F-5AB684DCEB5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24223FD7-61CA-46A4-919F-5AB684DCEB5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24223FD7-61CA-46A4-919F-5AB684DCEB5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6FAFE3FC-6347-4859-A25E-900B88AA8231} = {B64003C5-8CFD-419A-9E10-97130C16DBBE}
+		{16137AE5-C264-435A-B976-70FE2D8DADC1} = {9AD1E426-A5C0-4109-9E56-83C6145DFFD3}
+		{BE95AE65-5C18-4B0B-A26A-027ADA86301D} = {9AD1E426-A5C0-4109-9E56-83C6145DFFD3}
+		{24223FD7-61CA-46A4-919F-5AB684DCEB5F} = {F7ED7EF7-849B-4C69-93A2-133C893AD133}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3805753A-4BF4-4828-A356-089E814D8449}
