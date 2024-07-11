@@ -13,35 +13,35 @@ namespace PaparaBootcamp.Application.Services
             _productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync(string name, string sortBy)
+        public async Task<IEnumerable<ProductEntity>> GetProductsAsync()
         {
-            return await _productRepository.GetProductsAsync(name, sortBy);
+            return await _productRepository.GetAllAsync();
         }
 
-        public async Task<(IEnumerable<Product> items, int totalCount)> GetItemsAsync(int pageIndex, int pageSize)
+        public async Task<(IEnumerable<ProductEntity> items, int? totalCount)> GetItemsAsync(int pageIndex, int pageSize,string name , string sortBy)
         {
-            return await _productRepository.GetItemsAsync(pageIndex, pageSize);
+            return await _productRepository.GetItemsAsync(pageIndex, pageSize, name,sortBy);
         }
 
-        public async Task<Product> GetProductAsync(int id)
+        public async Task<ProductEntity> GetProductAsync(int id)
         {
-            return await _productRepository.GetProductAsync(id);
+            return await _productRepository.GetItemAsync(id);
         }
 
-        public async Task AddProductAsync(Product product)
+        public async Task AddAsync(ProductEntity product)
         {
 
-            await _productRepository.AddProductAsync(product);
+            await _productRepository.AddAsync(product);
         }
 
-        public async Task UpdateProductAsync(Product product)
+        public async Task UpdateAsync(ProductEntity product)
         {
-            await _productRepository.UpdateProductAsync(product);
+            await _productRepository.UpdateAsync(product);
         }
 
-        public async Task DeleteProductAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            await _productRepository.DeleteProductAsync(id);
+            await _productRepository.DeleteAsync(id);
         }
     }
 }

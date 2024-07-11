@@ -3,7 +3,7 @@ using PaparaBootcamp.Domain.Entities;
 
 namespace PaparaBootcamp.Application.Validators
 {
-    public class ProductValidator : AbstractValidator<Product>
+    public class ProductValidator : AbstractValidator<ProductEntity>
     {
         public ProductValidator()
         {

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PaparaBootcamp.Application\PaparaBootcamp.Application.csproj" />
     <ProjectReference Include="..\PaparaBootcamp.Domain\PaparaBootcamp.Domain.csproj" />
   </ItemGroup>

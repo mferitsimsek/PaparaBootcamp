@@ -9,6 +9,8 @@ using PaparaBootcamp.Application.Services;
 using PaparaBootcamp.Application.Interfaces;
 using PaparaBootcamp.Application.Validators;
 using PaparaBootcamp.RestfulAPI.Extensions.Middleware;
+using System.Reflection;
+using PaparaBootcamp.Application.CQRS.Handlers.Product;
 
 namespace PaparaBootcamp.RestfulAPI.Extensions
 {
@@ -17,12 +19,26 @@ namespace PaparaBootcamp.RestfulAPI.Extensions
 
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
+
             // Hafızada oluşturulan veritabanı
             services.AddDbContext<MyDbContext>(options =>
                 options.UseInMemoryDatabase("MyDatabase"));
 
+
+
             // Patch methodu için gerekli olan newtonsoftJson
             services.AddControllers().AddNewtonsoftJson();
+
+
+            services.AddMediatR(opt =>
+            {
+                opt.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
+
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(GetAllProductsQueryHandler).Assembly);
+            });
 
             // Loglama
             services.AddLogging();
@@ -37,6 +53,7 @@ namespace PaparaBootcamp.RestfulAPI.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ProductService>();
             services.AddScoped<LoginService>();
+
 
             // Swagger
             services.AddEndpointsApiExplorer();

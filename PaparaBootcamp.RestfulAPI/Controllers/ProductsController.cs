@@ -1,12 +1,20 @@
 ﻿using AutoMapper;
+using Azure.Core;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using PaparaBootcamp.Application.Attributes;
+using PaparaBootcamp.Application.CQRS.Commands.Product;
+using PaparaBootcamp.Application.CQRS.Queries.Product;
 using PaparaBootcamp.Application.Services;
+using PaparaBootcamp.Application.Validators;
 using PaparaBootcamp.Domain.DTOs;
 using PaparaBootcamp.Domain.Entities;
 using PaparaBootcamp.Persistence.Context;
+using PaparaBootcamp.RestfulAPI.Entities;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace PaparaBootcamp.RestfulAPI.Controllers
@@ -18,84 +26,111 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
         private readonly MyDbContext _context;
         private readonly ProductService _productService;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public ProductsController(MyDbContext context, ProductService productService, IMapper mapper)
+        public ProductsController(MyDbContext context, ProductService productService, IMapper mapper, IMediator mediator)
         {
             _context = context;
             _productService = productService;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(string? name, string? sortBy)
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
         {
-            var products = await _productService.GetProductsAsync(name, sortBy);
-            return Ok(products);
+            try
+            {
+                var response = await _mediator.Send(request: new GetAllProductsQueryRequest());
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("items")]
-        public async Task<ActionResult> GetItems(int pageIndex = 0, int pageSize = 10)
+        public async Task<ActionResult> GetProducts(GetProductsQueryRequest request)
         {
-            var (items, totalCount) = await _productService.GetItemsAsync(pageIndex, pageSize);
-            var paginationMetadata = new
+            try
             {
-                totalCount,
-                pageIndex,
-                pageSize,
-                hasNextPage = totalCount > (pageIndex + 1) * pageSize,
-                hasPreviousPage = pageIndex > 0
-            };
-
-            return Ok(new { items, paginationMetadata });
+                var response = await _mediator.Send(request);
+                // Pagination kontrollerini response'u döndürmeden yapıyoruz.
+                var paginationMetadata = new
+                {
+                    response.TotalCount,
+                    request.PageIndex,
+                    request.PageSize,
+                    hasNextPage = response.TotalCount > (request.PageIndex + 1) * request.PageSize,
+                    hasPreviousPage = request.PageIndex > 0
+                };
+                return Ok(new { response.Items, paginationMetadata });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
-            var product = await _productService.GetProductAsync(id);
-
-            if (product == null)
+            try
             {
-                return NotFound(new { Message = "Ürün bulunamadı." });
+                
+                var response = await _mediator.Send(new GetProductByIdQueryRequest { ProductId = id });
+                return Ok(response);
             }
-
-            return Ok(product);
+            catch (Exception ex)
+            {
+                //Validasyonlar Handler sınıfları içerisinde yapılıyor. Hata durumunda buraya düşer.
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         [Auth]
-        public async Task<ActionResult<Product>> PostProduct([FromBody] ProductDTO productDTO)
+        public async Task<IActionResult> PostProduct(ProductCreateCommandRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var product = _mapper.Map<Product>(productDTO);
+            try
+            {                
+                var response = await _mediator.Send<ProductDTO>(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
 
-            await _productService.AddProductAsync(product);
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
         [Auth]
-        public async Task<ActionResult<Product>> PutProduct(int id, [FromBody] ProductDTO productDTO)
+        public async Task<ActionResult<ProductEntity>> PutProduct(ProductUpdateCommandRequest request)
         {
-            if (id != productDTO.Id)
-            {
-                return BadRequest(new { Message = "Güncellemek istediğiniz ürün id'leri eşleşmedi." });
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var product= _mapper.Map<Product>(productDTO);  
-            await _productService.UpdateProductAsync(product);
-            return Ok(product);
+            try
+            {              
+                var response = await _mediator.Send<ProductDTO>(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult<Product>> PatchProduct(int id, [FromBody] JsonPatchDocument<Product> patchDoc)
+        public async Task<ActionResult<ProductEntity>> PatchProduct(int id, [FromBody] JsonPatchDocument<ProductEntity> patchDoc)
         {
             if (patchDoc == null)
             {
@@ -115,21 +150,22 @@ namespace PaparaBootcamp.RestfulAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _productService.UpdateProductAsync(product);
+            await _productService.UpdateAsync(product);
             return Ok(product);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _productService.GetProductAsync(id);
-            if (product == null)
+            try
             {
-                return NotFound(new { Message = "Ürün bulunamadı." });
+                var response = await _mediator.Send(new ProductDeleteCommandRequest { ProductId = id });
+                return Ok(response);
             }
-
-            await _productService.DeleteProductAsync(id);
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }           
         }
 
     }

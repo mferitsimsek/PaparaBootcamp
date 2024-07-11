@@ -9,13 +9,13 @@ namespace PaparaBootcamp.Persistence.Context
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
         }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>().HasKey(p => p.Id);
-            modelBuilder.Entity<Product>().Property(p => p.Name).IsRequired();
-            modelBuilder.Entity<Product>().Property(p => p.Description).IsRequired();
+            modelBuilder.Entity<ProductEntity>().HasKey(p => p.Id);
+            modelBuilder.Entity<ProductEntity>().Property(p => p.Name).IsRequired();
+            modelBuilder.Entity<ProductEntity>().Property(p => p.Description).IsRequired();
         }
     }
 }

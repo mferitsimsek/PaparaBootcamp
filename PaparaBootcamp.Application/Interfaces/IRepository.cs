@@ -8,11 +8,11 @@ namespace PaparaBootcamp.Application.Interfaces
 {
     public interface IRepository<T> where T : class 
     {
-        Task<IEnumerable<T>> GetProductsAsync(string name, string sortBy);
-        Task<(IEnumerable<T>, int )> GetItemsAsync(int pageIndex, int pageSize);
-        Task<T> GetProductAsync(int id);
-        Task AddProductAsync(T product);
-        Task UpdateProductAsync(T product);
-        Task DeleteProductAsync(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<(List<T> Items, int TotalCount)> GetItemsAsync(int pageIndex, int pageSize, string name, string sortBy);
+        Task<T> GetItemAsync(int id);
+        Task AddAsync(T item);
+        Task UpdateAsync(T item);
+        Task DeleteAsync(int id);
     }
 }

@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace PaparaBootcamp.Application.Interfaces
 {
-    public interface IProductRepository:IRepository<Product?>
+    public interface IProductRepository:IRepository<ProductEntity?>
     {
-        //Task<IEnumerable<T>> GetProductsAsync(string name, string sortBy);
-        //Task<(IEnumerable<T>, int)> GetItemsAsync(int pageIndex, int pageSize);
-        //Task<Product> GetProductAsync(int id);
-        //Task AddProductAsync(T product);
-        //Task UpdateProductAsync(T product);
-        //Task DeleteProductAsync(int id);
+
     }
 }
